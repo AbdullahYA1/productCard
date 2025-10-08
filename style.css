@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'Arshid';
+    src: url('https://127.0.0.1:5501/product.html/Arshid.otf') format('opentype');
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: rgb(211, 218, 211);
+  color: #070707;
+  text-align: center;
+
+}
+.product-card {
+  border-radius: 10px;
+  border: none;
+  margin: 0;
+  background-color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+ img {
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  background-color:rgb(211, 218, 211) ;
+
+}
+.product-info {
+  margin: 20px;
+}
+.product-name{
+  font-size: 1rem;
+  font-style: italic;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  text-align: right;
+  font-weight: 100;
+}
+.product-price{
+  font-size: 1rem;
+  font-style: italic;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  text-align: right;
+  margin: 8px;
+}
+
+.card-btn {
+  border-radius: 10px;
+  border: solid 1px;
+  width: 70%;
+  height: 2rem;
+  background-color: #fff;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+.card-btn:hover{
+  background-color: rgb(125, 125, 162);
+  cursor: pointer;
+}
+.product-card:hover{
+transform: translateY(-5px);
+box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* Shopping Cart Styles */
+#cart-link {
+  position: relative;
+  color: #333 !important;
+  text-decoration: none;
+}
+
+#cart-link:hover {
+  color: #007bff !important;
+}
+
+#cart-count {
+  font-size: 0.75rem;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.fa-shopping-cart {
+  font-size: 1.2rem;
+}
