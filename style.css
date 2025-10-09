@@ -8,59 +8,86 @@
   box-sizing: border-box;
 }
 body {
-  background-color: rgb(211, 218, 211);
-  color: #070707;
+  background-color: #f8f9fa;
+  color: #333;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+/* Product Cards Container */
+#product-list {
+  padding: 2rem 0;
+}
+
+#product-list .col {
+  margin-bottom: 2rem;
+}
+
+/* Bootstrap Card Styling */
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Image */
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+  border-radius: 0;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* Card Body */
+.card-body {
+  padding: 1.5rem;
   text-align: center;
-
 }
-.product-card {
-  border-radius: 10px;
+
+/* Product Title */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+}
+
+/* Product Price */
+.card-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #91b7d6;
+  margin-bottom: 1.5rem;
+}
+
+/* Add to Cart Button */
+.btn-primary {
+  background: linear-gradient(45deg, #3498db, #2980b9);
   border: none;
-  margin: 0;
-  background-color: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
- img {
-  border-radius: 10px;
-  border: none;
-  width: 100%;
-  background-color:rgb(211, 218, 211) ;
-
-}
-.product-info {
-  margin: 20px;
-}
-.product-name{
-  font-size: 1rem;
-  font-style: italic;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  text-align: right;
-  font-weight: 100;
-}
-.product-price{
-  font-size: 1rem;
-  font-style: italic;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  text-align: right;
-  margin: 8px;
+  border-radius: 25px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 }
 
-.card-btn {
-  border-radius: 10px;
-  border: solid 1px;
-  width: 70%;
-  height: 2rem;
-  background-color: #fff;
-  margin-bottom: 20px;
-  justify-content: center;
-}
-.card-btn:hover{
-  background-color: rgb(125, 125, 162);
-  cursor: pointer;
-}
-.product-card:hover{
-transform: translateY(-5px);
-box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+.btn-primary:hover {
+  background: linear-gradient(45deg, #2980b9, #1f618d);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
 }
 
 /* Shopping Cart Styles */
