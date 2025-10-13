@@ -44,8 +44,10 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#" id="cart-link">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cart-count" class="badge bg-primary rounded-pill ms-1">0</span>
+                <button class="cart-btn" id="cartBtn">
+                    <i class="fa fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
               </a>
             </li>
           </ul>
@@ -81,6 +83,22 @@
         <li>Sara</li>
         </ul>-->
       </div>
+    </div>
+      <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 data-translate="shoppingCart">Shopping Cart</h3>
+            <button class="cart-close" id="cartCloseBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fa fa-shopping-bag"></i>
+                <p data-translate="cartEmpty">Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-total" id="cartTotal" style="display: none;">
+            <div class="total-amount"><span data-translate="total">Total</span>: $<span id="totalAmount">0.00</span></div>
+            <button class="checkout-btn" onclick="window.location.href='checkout.html'" data-translate="checkout">Checkout</button>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="app.js"></script>
