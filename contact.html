@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Us</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -13,46 +13,48 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-<div class="container">
-    <h2 class="headline-contact">Contact Us</h2>
-    <form action="backend/contact.php" method="POST">
-<div class="name-container">
-        <label for="name" class="name">Name:</label>
-       <br />
-       <input 
-       type="text" 
-       name="name" id="name" 
-       class="name" 
-       placeholder="Enter Your Name" 
-       required />
-    </div>
-    <div class="email-container">
-        <label for="email" class="email">Email:</label>
-        <br />
-        <input
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="headline-contact">Contact Us</h2>
+      <form action="backend/contact.php" method="POST">
+        <div class="name-container">
+          <label for="name" class="name">Name:</label>
+          <br />
+          <input
+            type="text"
+            name="name"
+            id="name"
+            class="name"
+            placeholder="Enter Your Name"
+            required
+          />
+        </div>
+        <div class="email-container">
+          <label for="email" class="email">Email:</label>
+          <br />
+          <input
             type="email"
             class="email"
             id="email"
             name="email"
             placeholder="Enter Your Email"
             required
-        />
-    </div>
-    <div class="message-container">
-        <label for="message" class="message">Message:</label>
-        <br />
-        <textarea
+          />
+        </div>
+        <div class="message-container">
+          <label for="message" class="message">Message:</label>
+          <br />
+          <textarea
             class="message"
             id="message"
             name="message"
             placeholder="Enter Your Message"
             required
-        ></textarea>
+          ></textarea>
+        </div>
+        <button class="submit-btn" type="submit">Submit</button>
+      </form>
     </div>
-    <button class="submit-btn" type="submit">Submit</button>
-    </form> 
-</div>    
-</body>
+  </body>
 </html>
