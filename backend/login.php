@@ -1,23 +1,31 @@
 <?php 
-session_start();
 
+include 'db.php';
 // Handle login request
 if(isset($_POST['email']) && isset($_POST['password'])) {
     $login_email = $_POST['email'];
     $login_password = $_POST['password'];
-    
-    // Check if session has signup data and if login credentials match
-    if(isset($_SESSION['user_email']) && isset($_SESSION['user_password'])) {
-        if($_SESSION['user_email'] === $login_email && $_SESSION['user_password'] === $login_password) {
-            echo "Login Successfully";
-        } else {
-            echo "Login Failed";
+   
+    try {
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $login_email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+    $users = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
         }
-    } else {
-        echo "No user found. Please sign up first.";
     }
-} else {
-    echo "All fields are required";
+
+    echo json_encode($users);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+}
+    $conn->close();
 }
 ?>
 
