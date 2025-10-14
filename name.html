@@ -3,13 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Security Vulnerabilities Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .warning {
+            background-color: #ff4444;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .demo-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .demo-link:hover {
+            background-color: #0056b3;
+        }
+        .info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-       <form action="backend/get.php" method="GET">
-        <label>search for a product:</label>
-        <input type="text" name="search"/>
-        <button type="submit">Send</button>
-      </form>
+    <div class="warning">
+        ⚠️ EDUCATIONAL SECURITY DEMO
+        <br>For Learning Purposes Only - Contains Intentional Vulnerabilities
+    </div>
+
+    <div class="demo-container">
+        <h1>Web Security Vulnerabilities Demo</h1>
+        
+        <div class="info">
+            <h3>What you'll learn:</h3>
+            <ul>
+                <li><strong>XSS (Cross-Site Scripting)</strong> - How malicious scripts can be injected</li>
+                <li><strong>SQL Injection</strong> - How database queries can be manipulated</li>
+                <li><strong>Best Practices</strong> - How to prevent these vulnerabilities</li>
+            </ul>
+        </div>
+
+        <p>Choose a demo to explore:</p>
+        
+        <a href="backend/vulnerable_search.php" class="demo-link" style="background-color: #dc3545;">
+            🔓 Vulnerable Version
+        </a>
+        
+        <a href="backend/secure_search.php" class="demo-link" style="background-color: #28a745;">
+            ✅ Secure Version
+        </a>
+        
+        <div class="info">
+            <h3>Safety Note:</h3>
+            <p>This demo runs in a controlled environment and is designed for educational purposes. 
+            The vulnerabilities demonstrated here should <strong>never</strong> be implemented in real applications.</p>
+        </div>
+    </div>
 </body>
 </html>

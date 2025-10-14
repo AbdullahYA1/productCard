@@ -12,6 +12,28 @@ const cartTotal = document.getElementById("cartTotal");
 // Very simple cart (array of items, duplicates allowed)
 let cart = [];
 
+const requestOptions = {
+    method: "GET",
+    redirect: "follow"
+};
+
+fetch("backend/get.php", requestOptions)
+    .then((response) => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((products) => {
+        console.log('Products loaded from database:', products);
+        renderProducts(products);
+    })
+    .catch((error) => {
+        console.error('Error fetching products from backend:', error);
+        productCard.innerHTML = '<div class="col-12"><div class="alert alert-danger">Failed to load products. Please check the database connection.</div></div>';
+    });
+
 
 function renderProducts(products) {
     productCard.innerHTML = ''; // Clear existing content
@@ -51,27 +73,6 @@ function renderProducts(products) {
 }
 
 // Fetch products from PHP backend only
-const requestOptions = {
-    method: "GET",
-    redirect: "follow"
-};
-
-fetch("backend/get.php", requestOptions)
-    .then((response) => {
-        console.log('Response status:', response.status);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then((products) => {
-        console.log('Products loaded from database:', products);
-        renderProducts(products);
-    })
-    .catch((error) => {
-        console.error('Error fetching products from backend:', error);
-        productCard.innerHTML = '<div class="col-12"><div class="alert alert-danger">Failed to load products. Please check the database connection.</div></div>';
-    });
 
 // Update sidebar list, total and count (minimal)
 function updateCartUI() {
