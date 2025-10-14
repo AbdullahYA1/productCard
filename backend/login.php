@@ -20,3 +20,4 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
     echo "All fields are required";
 }
 ?>
+

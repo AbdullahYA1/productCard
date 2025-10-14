@@ -1,3 +1,7 @@
 <?php
-echo "<h2>Welcome to the Backend</h2>";
-?>
+
+function hello ($name){
+    return "Hello, $name!";
+}
+
+echo hello(hello("ahmed"));

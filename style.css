@@ -1,7 +1,3 @@
-@font-face {
-    font-family: 'Arshid';
-    src: url('https://127.0.0.1:5501/product.html/Arshid.otf') format('opentype');
-}
 * {
   margin: 0;
   padding: 0;
@@ -187,6 +183,27 @@ body {
     opacity: 0.7;
 }
 
+/* Remove from Cart Button */
+.remove-from-cart {
+    border: none;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+}
+
+.remove-from-cart:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -257,14 +274,14 @@ body {
     margin-left: 10px;
 }
 
-/* Signup Form Styles */
-.container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Signup/Form Styles (scoped so we don't override Bootstrap .container globally) */
+.auth-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .headline {
