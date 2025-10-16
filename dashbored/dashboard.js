@@ -1,433 +1,579 @@
-// Simple Admin Dashboard JavaScript for Beginners
-class SimpleDashboard {
-    constructor() {
-        this.currentSection = 'overview';
-        this.isLoggedIn = false;
-        this.currentEditId = null;
-        this.currentDeleteId = null;
-        
-        // Sample data for demonstration
-        this.products = [
-            { id: 1, name: 'iPhone 15', price: 999.99, description: 'Latest iPhone model', image: 'https://via.placeholder.com/50x50' },
-            { id: 2, name: 'Samsung Galaxy S24', price: 899.99, description: 'Premium Android phone', image: 'https://via.placeholder.com/50x50' },
-            { id: 3, name: 'MacBook Pro', price: 1999.99, description: 'Professional laptop', image: 'https://via.placeholder.com/50x50' },
-            { id: 4, name: 'iPad Air', price: 599.99, description: 'Tablet for work and play', image: 'https://via.placeholder.com/50x50' }
-        ];
-        
-        this.orders = [
-            { id: 1001, customerName: 'John Doe', email: 'john@example.com', date: '2024-01-15', items: 2, total: 1599.98, status: 'completed' },
-            { id: 1002, customerName: 'Jane Smith', email: 'jane@example.com', date: '2024-01-14', items: 1, total: 999.99, status: 'pending' },
-            { id: 1003, customerName: 'Bob Johnson', email: 'bob@example.com', date: '2024-01-13', items: 3, total: 2899.97, status: 'completed' },
-            { id: 1004, customerName: 'Alice Brown', email: 'alice@example.com', date: '2024-01-12', items: 1, total: 599.99, status: 'cancelled' }
-        ];
-        
-        this.init();
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+});
+
+function initializeDashboard() {
+    // Check if already logged in
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
+        showDashboard();
     }
 
-    init() {
-        this.bindEvents();
-        this.checkLoginStatus();
+    // Login form handler
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
     }
+}
 
-    bindEvents() {
-        // Login form
-        document.getElementById('loginForm')?.addEventListener('submit', (e) => this.handleLogin(e));
-        
-        // Product form
-        document.getElementById('productForm')?.addEventListener('submit', (e) => this.handleProductSubmit(e));
-        
-        // Delete confirmation
-        document.getElementById('confirmDeleteBtn')?.addEventListener('click', () => this.confirmDelete());
+function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('adminEmail').value;
+    const password = document.getElementById('adminPassword').value;
+    
+    // Simple demo authentication
+    if (email === 'admin@hashplus.com' && password === 'admin123') {
+        localStorage.setItem('adminLoggedIn', 'true');
+        showDashboard();
+    } else {
+        alert('Invalid credentials! Use: admin@hashplus.com / admin123');
     }
+}
 
-    // Authentication
-    checkLoginStatus() {
-        // Check if user is logged in (in real app, check session/token)
-        const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-        
-        if (isLoggedIn) {
-            this.isLoggedIn = true;
-            this.showDashboard();
-        } else {
-            this.showLogin();
-        }
+function showDashboard() {
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('dashboard-content').style.display = 'block';
+    
+    // Initialize dashboard data
+    loadDashboardData();
+    
+    // Initialize form handlers with a small delay to ensure elements are rendered
+    setTimeout(() => {
+        initializeProductForm();
+    }, 100);
+}
+
+function initializeProductForm() {
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        // Remove any existing listeners first
+        productForm.removeEventListener('submit', handleProductSubmit);
+        // Add the event listener
+        productForm.addEventListener('submit', handleProductSubmit);
+        console.log('Product form event listener attached successfully');
+    } else {
+        console.log('Product form not found');
     }
+}
 
-    handleLogin(e) {
-        e.preventDefault();
-        
-        const email = document.getElementById('adminEmail').value;
-        const password = document.getElementById('adminPassword').value;
-        
-        // Simple demo login (in real app, validate against server)
-        if (email === 'admin@hashplus.com' && password === 'admin123') {
-            localStorage.setItem('adminLoggedIn', 'true');
-            this.isLoggedIn = true;
-            this.showDashboard();
-            this.showNotification('Login successful!', 'success');
-        } else {
-            this.showNotification('Invalid credentials. Use admin@hashplus.com / admin123', 'danger');
-        }
+function logout() {
+    localStorage.removeItem('adminLoggedIn');
+    document.getElementById('login-section').style.display = 'flex';
+    document.getElementById('dashboard-content').style.display = 'none';
+}
+
+function showSection(sectionName) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Remove active class from all nav links
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(sectionName + '-section').classList.add('active');
+    
+    // Add active class to clicked nav link
+    event.target.classList.add('active');
+    
+    // Load section specific data
+    if (sectionName === 'products') {
+        loadProducts();
+    } else if (sectionName === 'orders') {
+        loadOrders();
     }
+}
 
-    logout() {
-        localStorage.removeItem('adminLoggedIn');
-        this.isLoggedIn = false;
-        this.showLogin();
-        this.showNotification('Logged out successfully', 'info');
-    }
+function loadDashboardData() {
+    // Load products and update stats
+    loadProducts();
+    // Keep some static stats for now, but products count will be dynamic
+    updateStaticStats();
+}
 
-    showLogin() {
-        document.getElementById('login-section').style.display = 'flex';
-        document.getElementById('dashboard-content').style.display = 'none';
-    }
+function updateStaticStats() {
+    // These would typically come from backend API calls
+    // Products count will be updated by loadProducts()
+    document.getElementById('total-orders').textContent = '28';
+    document.getElementById('total-revenue').textContent = '$15,420';
+    document.getElementById('pending-orders').textContent = '5';
+}
 
-    showDashboard() {
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('dashboard-content').style.display = 'block';
-        this.loadOverview();
-    }
+// Product Management Functions
+function showAddProductForm() {
+    document.getElementById('product-form').style.display = 'block';
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-plus"></i> Add New Product';
+    document.getElementById('productForm').reset();
+    
+    // Reset to add mode (in case we were in edit mode)
+    resetFormToAddMode();
+    
+    // Ensure event listener is attached when form is shown
+    initializeProductForm();
+}
 
-    // Section Management
-    showSection(sectionName) {
-        // Hide all sections
-        document.querySelectorAll('.section').forEach(section => {
-            section.classList.remove('active');
+function hideProductForm() {
+    document.getElementById('product-form').style.display = 'none';
+    document.getElementById('message').innerHTML = '';
+}
+
+function handleProductSubmit(e) {
+    e.preventDefault();
+    console.log('Form submitted!'); // Debug log
+    
+    const formData = new FormData(e.target);
+    
+    console.log('FormData created:', formData); // Debug log
+    
+    const requestOptions = {
+        method: "POST",
+        body: formData,
+        redirect: "follow"
+    };
+
+    fetch("http://localhost/productCard/backend/add-product.php", requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+            console.log('Server response:', result);
+            try {
+                const data = JSON.parse(result);
+                if (data.success) {
+                    showMessage('Product added successfully!', 'success');
+                    e.target.reset();
+                    hideProductForm();
+                    loadProducts(); // Refresh products list
+                    // Stats will be updated automatically by loadProducts()
+                } else {
+                    showMessage('Error: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('JSON parse error:', error);
+                showMessage('Error parsing response: ' + result, 'danger');
+            }
+        })
+        .catch((error) => {
+            console.error('Fetch error:', error);
+            showMessage('Error: ' + error.message, 'danger');
         });
-        
-        // Show selected section
-        document.getElementById(`${sectionName}-section`).classList.add('active');
+}
 
-        // Update active nav link
-        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-            link.classList.remove('active');
+function loadProducts() {
+    const productsTable = document.getElementById('products-table');
+    if (!productsTable) return;
+    
+    // Show loading spinner
+    productsTable.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading products...</p>
+            </td>
+        </tr>
+    `;
+    
+    // Fetch products from the API
+    fetch('http://localhost/productCard/backend/get.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Products loaded:', data);
+            
+            if (data.success) {
+                // Check if products array exists and has items
+                if (data.products && data.products.length > 0) {
+                    displayProducts(data.products);
+                    updateProductsCount(data.products.length);
+                } else {
+                    // No products found
+                    showNoProductsMessage();
+                    updateProductsCount(0);
+                }
+            } else {
+                // API returned success: false
+                showErrorMessage(data.message || 'Failed to load products');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading products:', error);
+            showErrorMessage(error.message);
         });
-        document.querySelector(`[onclick="showSection('${sectionName}')"]`).classList.add('active');
+}
 
-        this.currentSection = sectionName;
+function showNoProductsMessage() {
+    const productsTable = document.getElementById('products-table');
+    productsTable.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center text-muted py-5">
+                <i class="fas fa-box-open fa-3x mb-3 text-secondary"></i>
+                <h5>No products found</h5>
+                <p>Start by adding your first product to the store</p>
+                <button class="btn btn-primary" onclick="showAddProductForm()">
+                    <i class="fas fa-plus"></i> Add First Product
+                </button>
+            </td>
+        </tr>
+    `;
+}
 
-        // Load section data
-        switch(sectionName) {
-            case 'overview':
-                this.loadOverview();
-                break;
-            case 'products':
-                this.loadProducts();
-                break;
-            case 'orders':
-                this.loadOrders();
-                break;
-        }
+function showErrorMessage(message) {
+    const productsTable = document.getElementById('products-table');
+    productsTable.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center text-danger py-4">
+                <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                <h6>Error loading products</h6>
+                <p class="small">${message}</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="loadProducts()">
+                    <i class="fas fa-refresh"></i> Try Again
+                </button>
+            </td>
+        </tr>
+    `;
+}
+
+function displayProducts(products) {
+    const productsTable = document.getElementById('products-table');
+    
+    if (products.length === 0) {
+        showNoProductsMessage();
+        return;
     }
-
-    // Overview/Dashboard
-    loadOverview() {
-        this.updateStatistics();
-        this.loadRecentOrders();
-    }
-
-    updateStatistics() {
-        // Calculate statistics from sample data
-        const totalProducts = this.products.length;
-        const totalOrders = this.orders.length;
-        const totalRevenue = this.orders.filter(o => o.status === 'completed')
-            .reduce((sum, order) => sum + order.total, 0);
-        const pendingOrders = this.orders.filter(o => o.status === 'pending').length;
-
-        // Update dashboard cards
-        document.getElementById('total-products').textContent = totalProducts;
-        document.getElementById('total-orders').textContent = totalOrders;
-        document.getElementById('total-revenue').textContent = `$${totalRevenue.toFixed(2)}`;
-        document.getElementById('pending-orders').textContent = pendingOrders;
-    }
-
-    loadRecentOrders() {
-        const recentOrders = this.orders.slice(0, 5); // Get last 5 orders
-        const tbody = document.getElementById('recent-orders-table');
+    
+    const rows = products.map(product => {
+        // Truncate description if too long
+        const description = product.description ? 
+            (product.description.length > 50 ? 
+                product.description.substring(0, 50) + '...' : 
+                product.description) : 
+            'No description';
         
-        if (!tbody) return;
-
-        tbody.innerHTML = recentOrders.map(order => `
+        // Format price
+        const price = parseFloat(product.price).toFixed(2);
+        
+        // Handle image with proper fallback
+        let imageUrl = product.image;
+        if (!imageUrl || imageUrl.trim() === '') {
+            imageUrl = 'images/carfuture.png';
+        }
+        // If it's a relative path, make sure it starts correctly
+        if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+            imageUrl = '../' + imageUrl;
+        }
+        
+        return `
             <tr>
-                <td>#${order.id}</td>
-                <td>${order.customerName}</td>
-                <td>${order.date}</td>
-                <td>$${order.total}</td>
+                <td><strong>#${product.id}</strong></td>
                 <td>
-                    <span class="badge ${this.getStatusBadgeClass(order.status)}">
-                        ${order.status.toUpperCase()}
+                    <div class="product-image-container">
+                        <img src="${imageUrl}" 
+                             alt="${product.name}" 
+                             class="product-image" 
+                             loading="lazy"
+                             onerror="handleImageError(this)"
+                             onload="handleImageLoad(this)">
+                        <div class="image-loading" style="display: none;">
+                            <div class="spinner-border spinner-border-sm" role="status"></div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <strong>${product.name}</strong>
+                    <br>
+                    <small class="text-muted">Added: ${formatDate(product.created_at)}</small>
+                </td>
+                <td>
+                    <span class="badge bg-success fs-6">$${price}</span>
+                </td>
+                <td>
+                    <span class="text-muted" title="${product.description || 'No description'}">
+                        ${description}
                     </span>
                 </td>
-            </tr>
-        `).join('');
-    }
-
-    // Product Management
-    loadProducts() {
-        this.renderProductsTable(this.products);
-    }
-
-    renderProductsTable(products) {
-        const tbody = document.getElementById('products-table');
-        if (!tbody) return;
-
-        tbody.innerHTML = products.map(product => `
-            <tr>
-                <td>#${product.id}</td>
                 <td>
-                    <img src="${product.image}" alt="${product.name}" class="product-image">
-                </td>
-                <td>${product.name}</td>
-                <td>$${product.price}</td>
-                <td class="text-truncate" style="max-width: 200px;">${product.description}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn btn-sm btn-outline-primary" onclick="dashboard.editProduct(${product.id})">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editProduct(${product.id})" title="Edit">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="dashboard.deleteProduct(${product.id})">
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${product.id}, '${product.name}')" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </td>
             </tr>
-        `).join('');
+        `;
+    }).join('');
+    
+    productsTable.innerHTML = rows;
+}
+
+function handleImageError(img) {
+    // Hide loading spinner if exists
+    const container = img.parentElement;
+    const spinner = container.querySelector('.image-loading');
+    if (spinner) spinner.style.display = 'none';
+    
+    // Set fallback image
+    img.src = '../images/carfuture.png';
+    img.style.opacity = '0.7';
+    img.title = 'Image not found - using default';
+}
+
+function handleImageLoad(img) {
+    // Hide loading spinner if exists
+    const container = img.parentElement;
+    const spinner = container.querySelector('.image-loading');
+    if (spinner) spinner.style.display = 'none';
+    
+    // Show the image
+    img.style.opacity = '1';
+}
+
+function updateProductsCount(count) {
+    const totalProductsElement = document.getElementById('total-products');
+    if (totalProductsElement) {
+        totalProductsElement.textContent = count;
     }
+}
 
-    showAddProductForm() {
-        document.getElementById('form-title').innerHTML = '<i class="fas fa-plus"></i> Add New Product';
-        document.getElementById('productForm').reset();
-        document.getElementById('productId').value = '';
-        document.getElementById('product-form').style.display = 'block';
-        document.getElementById('productName').focus();
-    }
+function formatDate(dateString) {
+    if (!dateString) return 'Unknown';
+    
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
 
-    hideProductForm() {
-        document.getElementById('product-form').style.display = 'none';
-        document.getElementById('productForm').reset();
-    }
-
-    editProduct(id) {
-        const product = this.products.find(p => p.id === id);
-        if (!product) return;
-
-        // Populate form with product data
-        document.getElementById('productId').value = product.id;
-        document.getElementById('productName').value = product.name;
-        document.getElementById('productPrice').value = product.price;
-        document.getElementById('productDescription').value = product.description;
-        document.getElementById('productImage').value = product.image;
-
-        document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
-        document.getElementById('product-form').style.display = 'block';
-        this.currentEditId = id;
-    }
-
-    handleProductSubmit(e) {
-        e.preventDefault();
-        
-        const formData = {
-            id: document.getElementById('productId').value,
-            name: document.getElementById('productName').value,
-            price: parseFloat(document.getElementById('productPrice').value),
-            description: document.getElementById('productDescription').value,
-            image: document.getElementById('productImage').value || 'https://via.placeholder.com/50x50'
-        };
-
-        if (formData.id) {
-            // Update existing product
-            const index = this.products.findIndex(p => p.id == formData.id);
-            if (index !== -1) {
-                this.products[index] = { ...this.products[index], ...formData };
-                this.showNotification('Product updated successfully!', 'success');
+function editProduct(productId) {
+    console.log('Edit product:', productId);
+    
+    // Find the product data from the current products list
+    fetch('../backend/get.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.products) {
+            const product = data.products.find(p => p.id == productId);
+            if (product) {
+                // Show the form with product data
+                showEditProductForm(product);
+            } else {
+                showMessage('Product not found', 'danger');
             }
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching product:', error);
+        showMessage('Error loading product data', 'danger');
+    });
+}
+
+function showEditProductForm(product) {
+    // Show the product form
+    document.getElementById('product-form').style.display = 'block';
+    
+    // Change form title
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
+    
+    // Fill form with existing data
+    document.getElementById('productName').value = product.name;
+    document.getElementById('productDescription').value = product.description || '';
+    document.getElementById('productPrice').value = product.price;
+    document.getElementById('productImage').value = product.image || '';
+    
+    // Store product ID in a hidden field or data attribute
+    const form = document.getElementById('productForm');
+    form.dataset.editMode = 'true';
+    form.dataset.productId = product.id;
+    
+    // Change form submit handler
+    form.removeEventListener('submit', handleProductSubmit);
+    form.addEventListener('submit', handleProductUpdate);
+}
+
+function handleProductUpdate(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const productId = form.dataset.productId;
+    
+    // Get form data
+    const name = document.getElementById('productName').value;
+    const description = document.getElementById('productDescription').value;
+    const price = document.getElementById('productPrice').value;
+    const image = document.getElementById('productImage').value;
+    
+    // Create JSON data for PUT request
+    const productData = {
+        id: parseInt(productId),
+        name: name,
+        description: description,
+        price: parseFloat(price),
+        image: image
+    };
+    
+    console.log('Updating product:', productData);
+    
+    // Show loading message
+    showMessage('Updating product...', 'info');
+    
+    // Send PUT request
+    fetch('../backend/update-product.php', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Update response:', data);
+        
+        if (data.success) {
+            showMessage('Product updated successfully!', 'success');
+            hideProductForm();
+            loadProducts(); // Refresh products list
+            resetFormToAddMode();
         } else {
-            // Add new product
-            formData.id = Math.max(...this.products.map(p => p.id)) + 1;
-            this.products.push(formData);
-            this.showNotification('Product added successfully!', 'success');
+            showMessage('Error: ' + data.message, 'danger');
         }
+    })
+    .catch(error => {
+        console.error('Update error:', error);
+        showMessage('Network error: Could not update product', 'danger');
+    });
+}
 
-        this.hideProductForm();
-        this.loadProducts();
-        this.updateStatistics(); // Update counts
+function resetFormToAddMode() {
+    const form = document.getElementById('productForm');
+    
+    // Reset form title
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-plus"></i> Add New Product';
+    
+    // Reset form data attributes
+    delete form.dataset.editMode;
+    delete form.dataset.productId;
+    
+    // Reset form submit handler
+    form.removeEventListener('submit', handleProductUpdate);
+    form.addEventListener('submit', handleProductSubmit);
+    
+    // Clear form
+    form.reset();
+}
+
+function deleteProduct(productId, productName) {
+    console.log('Delete product:', productId, productName);
+    
+    // Show confirmation dialog
+    if (!confirm(`Are you sure you want to delete "${productName}"?\n\nThis action cannot be undone.`)) {
+        return;
     }
-
-    deleteProduct(id) {
-        const product = this.products.find(p => p.id === id);
-        if (!product) return;
-
-        this.currentDeleteId = id;
-        document.getElementById('deleteItemInfo').textContent = `Product: ${product.name}`;
-        new bootstrap.Modal(document.getElementById('deleteModal')).show();
-    }
-
-    confirmDelete() {
-        if (this.currentDeleteId) {
-            this.products = this.products.filter(p => p.id !== this.currentDeleteId);
-            this.showNotification('Product deleted successfully!', 'success');
-            this.loadProducts();
-            this.updateStatistics();
+    
+    // Show loading state
+    const deleteBtn = event.target.closest('button');
+    const originalContent = deleteBtn.innerHTML;
+    deleteBtn.disabled = true;
+    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('productId', productId);
+    
+    const requestOptions = {
+        method: "POST",
+        body: formData,
+        redirect: "follow"
+    };
+    
+    // Send delete request
+    fetch("http://localhost/productCard/backend/delete-product.php", requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Delete response:', data);
             
-            // Close modal
-            bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
-            this.currentDeleteId = null;
-        }
-    }
+            if (data.success) {
+                // Show success message
+                showMessage(`Product "${productName}" deleted successfully!`, 'success');
+                
+                // Refresh products list
+                loadProducts();
+            } else {
+                // Show error message
+                showMessage(`Error deleting product: ${data.message}`, 'danger');
+                
+                // Restore button
+                deleteBtn.disabled = false;
+                deleteBtn.innerHTML = originalContent;
+            }
+        })
+        .catch(error => {
+            console.error('Delete error:', error);
+            showMessage(`Network error: ${error.message}`, 'danger');
+            
+            // Restore button
+            deleteBtn.disabled = false;
+            deleteBtn.innerHTML = originalContent;
+        });
+}
 
-    // Order Management
-    loadOrders() {
-        this.renderOrdersTable(this.orders);
-    }
-
-    renderOrdersTable(orders) {
-        const tbody = document.getElementById('orders-table');
-        if (!tbody) return;
-
-        tbody.innerHTML = orders.map(order => `
+function loadOrders() {
+    const ordersTable = document.getElementById('orders-table');
+    if (!ordersTable) return;
+    
+    // Show loading spinner
+    ordersTable.innerHTML = `
+        <tr>
+            <td colspan="8" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading orders...</p>
+            </td>
+        </tr>
+    `;
+    
+    // Simulate API call (replace with actual orders API when available)
+    setTimeout(() => {
+        // For now, show no orders message
+        ordersTable.innerHTML = `
             <tr>
-                <td>#${order.id}</td>
-                <td>${order.customerName}</td>
-                <td>${order.email}</td>
-                <td>${order.date}</td>
-                <td>${order.items}</td>
-                <td>$${order.total}</td>
-                <td>
-                    <span class="badge ${this.getStatusBadgeClass(order.status)}">
-                        ${order.status.toUpperCase()}
-                    </span>
-                </td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn btn-sm btn-outline-primary" onclick="dashboard.showOrderDetails(${order.id})">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
+                <td colspan="8" class="text-center text-muted py-5">
+                    <i class="fas fa-shopping-cart fa-3x mb-3 text-secondary"></i>
+                    <h5>No orders found</h5>
+                    <p>Orders will appear here when customers make purchases</p>
                 </td>
             </tr>
-        `).join('');
-    }
-
-    showOrderDetails(orderId) {
-        const order = this.orders.find(o => o.id === orderId);
-        if (!order) return;
-
-        const orderDetails = `
-            <div class="row">
-                <div class="col-md-6">
-                    <h6><i class="fas fa-info-circle"></i> Order Information</h6>
-                    <p><strong>Order #:</strong> #${order.id}</p>
-                    <p><strong>Date:</strong> ${order.date}</p>
-                    <p><strong>Items:</strong> ${order.items}</p>
-                    <p><strong>Total:</strong> $${order.total}</p>
-                    <p><strong>Status:</strong> 
-                        <span class="badge ${this.getStatusBadgeClass(order.status)}">
-                            ${order.status.toUpperCase()}
-                        </span>
-                    </p>
-                </div>
-                <div class="col-md-6">
-                    <h6><i class="fas fa-user"></i> Customer Information</h6>
-                    <p><strong>Name:</strong> ${order.customerName}</p>
-                    <p><strong>Email:</strong> ${order.email}</p>
-                </div>
-            </div>
         `;
-        
-        document.getElementById('orderModalBody').innerHTML = orderDetails;
-        new bootstrap.Modal(document.getElementById('orderModal')).show();
-    }
+    }, 1000);
+}
 
-    // Search and Filter Functions
-    searchOrders() {
-        const query = document.getElementById('order-search').value.toLowerCase();
-        const filtered = this.orders.filter(order => 
-            order.customerName.toLowerCase().includes(query) ||
-            order.email.toLowerCase().includes(query) ||
-            order.id.toString().includes(query)
-        );
-        this.renderOrdersTable(filtered);
-    }
-
-    filterOrders() {
-        const statusFilter = document.getElementById('order-status-filter').value;
-        const dateFilter = document.getElementById('order-date-filter').value;
-        
-        let filtered = this.orders;
-        
-        if (statusFilter) {
-            filtered = filtered.filter(order => order.status === statusFilter);
-        }
-        
-        if (dateFilter) {
-            filtered = filtered.filter(order => order.date === dateFilter);
-        }
-        
-        this.renderOrdersTable(filtered);
-    }
-
-    // Utility Functions
-    getStatusBadgeClass(status) {
-        const statusClasses = {
-            'completed': 'bg-success',
-            'pending': 'bg-warning',
-            'cancelled': 'bg-danger',
-            'processing': 'bg-info',
-            'shipped': 'bg-primary'
-        };
-        return statusClasses[status] || 'bg-secondary';
-    }
-
-    showNotification(message, type = 'info') {
-        // Remove existing notifications
-        document.querySelectorAll('.notification').forEach(n => n.remove());
-        
-        // Create new notification
-        const notification = document.createElement('div');
-        notification.className = `alert alert-${type} alert-dismissible fade show notification`;
-        notification.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Auto remove after 4 seconds
+function showMessage(message, type) {
+    const messageDiv = document.getElementById('message');
+    if (!messageDiv) return;
+    
+    messageDiv.innerHTML = `<div class="alert alert-${type} fade-in">${message}</div>`;
+    
+    // Auto-hide success messages after 3 seconds
+    if (type === 'success') {
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 4000);
+            messageDiv.innerHTML = '';
+        }, 3000);
     }
 }
-
-// Global Functions for onclick handlers
-function showSection(sectionName) {
-    dashboard.showSection(sectionName);
-}
-
-function showAddProductForm() {
-    dashboard.showAddProductForm();
-}
-
-function hideProductForm() {
-    dashboard.hideProductForm();
-}
-
-function searchOrders() {
-    dashboard.searchOrders();
-}
-
-function filterOrders() {
-    dashboard.filterOrders();
-}
-
-function logout() {
-    dashboard.logout();
-}
-
-// Initialize Dashboard when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    window.dashboard = new SimpleDashboard();
-});
-

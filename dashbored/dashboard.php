@@ -165,31 +165,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Recent Orders -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h5><i class="fas fa-clock"></i> Recent Orders</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Order #</th>
-                                                <th>Customer</th>
-                                                <th>Date</th>
-                                                <th>Total</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="recent-orders-table">
-                                            <!-- Recent orders will be loaded here -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Products Section -->
@@ -214,7 +189,7 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="productName" class="form-label">Product Name *</label>
-                                                <input type="text" class="form-control" id="productName" required>
+                                                <input type="text" class="form-control" id="productName" name="name" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -222,18 +197,18 @@
                                                 <label for="productPrice" class="form-label">Price *</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">$</span>
-                                                    <input type="number" class="form-control" id="productPrice" step="0.01" required>
+                                                    <input type="number" class="form-control" id="productPrice" name="price" step="0.01" required>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="productDescription" class="form-label">Description</label>
-                                        <textarea class="form-control" id="productDescription" rows="3" placeholder="Enter product description..."></textarea>
+                                        <textarea class="form-control" id="productDescription" name="description" rows="3" placeholder="Enter product description..."></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="productImage" class="form-label">Image URL</label>
-                                        <input type="url" class="form-control" id="productImage" placeholder="https://example.com/image.jpg">
+                                        <input type="text" class="form-control" id="productImage" name="image" placeholder="images/default.png">
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-success">
@@ -244,6 +219,7 @@
                                         </button>
                                     </div>
                                 </form>
+                                <div id="message" class="mt-3"></div>
                             </div>
                         </div>
 
@@ -279,27 +255,6 @@
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h2"><i class="fas fa-shopping-cart"></i> Order History</h1>
                         </div>
-
-                        <!-- Order Filters -->
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <select class="form-select" id="order-status-filter" onchange="filterOrders()">
-                                    <option value="">All Orders</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="date" class="form-control" id="order-date-filter" onchange="filterOrders()">
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Search orders..." id="order-search" oninput="searchOrders()">
-                                </div>
-                            </div>
-                        </div>
                         
                         <div class="card">
                             <div class="card-header">
@@ -329,46 +284,6 @@
                         </div>
                     </div>
                 </main>
-            </div>
-        </div>
-    </div>
-
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-receipt"></i> Order Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="orderModalBody">
-                    <!-- Order details will be loaded here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this item? This action cannot be undone.</p>
-                    <p><strong id="deleteItemInfo"></strong></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </div>
             </div>
         </div>
     </div>

@@ -18,10 +18,10 @@ try {
         }
     }
     
-    echo json_encode($products);
+    echo json_encode(['success' => true, 'products' => $products]);
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 }
 
 $conn->close();
